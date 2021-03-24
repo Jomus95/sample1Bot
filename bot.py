@@ -1,4 +1,9 @@
 import telebot
+
+name = '';
+surname = '';
+age = 0;
+
 bot = telebot.TeleBot('1729967022:AAEfvh8IvWDe89nP38VG17Sd6MPcpiqTCCk')
 
 @bot.message_handler(commands=['start', 'help'])
@@ -11,10 +16,6 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, 'Привет!')
     else:
         bot.send_message(message.from_user.id, 'Не понимаю, что это значит.')
-        
-name = '';
-surname = '';
-age = 0;
 
 @bot.message_handler(content_types=['text'])
 def start(message):
@@ -43,6 +44,14 @@ def get_age(message):
              age = int(message.text) #проверяем, что возраст введен корректно
         except Exception:
              bot.send_message(message.from_user.id, 'Цифрами, пожалуйста');
-      bot.send_message(message.from_user.id, 'Тебе '+str(age)+' лет, тебя зовут '+name+' '+surname+'?')
+      bot.send_message(message.from_user.id, 'Ты '+str(age)+' в классе, тебя зовут '+name+' '+surname+'?')
+    
+     keyboard = types.InlineKeyboardMarkup(); #наша клавиатура
+      key_yes = types.InlineKeyboardButton(text='Да', callback_data='yes'); #кнопка «Да»
+      keyboard.add(key_yes); #добавляем кнопку в клавиатуру
+      key_no= types.InlineKeyboardButton(text='Нет', callback_data='no');
+      keyboard.add(key_no);
+      question = 'Тебе '+str(age)+' лет, тебя зовут '+name+' '+surname+'?';
+      bot.send_message(message.from_user.id, text=question, reply_markup=keyboard)
         
 bot.polling(none_stop=True)
